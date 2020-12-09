@@ -1,0 +1,18 @@
+from django.shortcuts import render
+
+# Create your views here.
+
+'''
+Here the 
+login 
+Registration
+authentication
+'''
+from django.urls import path
+from rest_framework_simplejwt import views as jwt_views
+
+urlpatterns = [
+    # Your URLs...
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+]
