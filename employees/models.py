@@ -1,38 +1,50 @@
+import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.core.validators import RegexValidator
-from management.models import Company
+from core.profile.models import UserProfile 
 
-PHONE_REGEX = "^[0-9]*$"
+from management.models import Company,SalaryInfo,LeaveInfo
+
 User = get_user_model()
 
 
-class Employee(models.Model):
-    user = models.OneToOneField(
-        User, verbose_name="user", related_name="hrprofile", on_delete=models.CASCADE
-    )
+class EmployeeProfile(UserProfile):    
     company = models.OneToOneField(
         Company,
         verbose_name="company",
-        related_name="hrprofile",
+        related_name="employees",
         on_delete=models.CASCADE,
+        blank=True, null=True,
     )
-    firstname = models.CharField(max_length=255, blank=True, null=True)
-    lastname = models.CharField(max_length=255, blank=True, null=True)
-    profile_pic = models.FileField(upload_to="company/logo/", blank=True, null=True)
-    phone = models.CharField(
-        max_length=12,
-        validators=[
-            RegexValidator(regex=PHONE_REGEX, message="phone number string not valid")
-        ],
-        blank=True,
-        null=True,
-    )
-    
+    joining_date = models.DateTimeField(blank=True, null=True)
+    department = models.CharField(max_length=255, blank=True, null=True)
+    designation = models.CharField(max_length=255, blank=True, null=True)
 
-    class Meta:
-        verbose_name = "Employee"
-        verbose_name_plural = "Employees"
+
+class LeaveRequest(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    employee = models.ForeignKey(User, related_name='leave_request', on_delete=models.CASCADE,blank=True, null=True)
+    from_date = models.DateTimeField()
+    to_date = models.DateTimeField()
+    is_approved = models.BooleanField(default=False)
+    is_rejected = models.BooleanField(default=False)
+    subject = models.CharField(max_length=255,blank=True, null=True)
+    reason = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return str(self.is_approved)
+    
+    class Meta:
+        permissions = (
+            ("create_leave_request","can create leave request"),
+            ("read_leave_request","can create leave request"),
+            ("update_leave_request","can create leave request"),
+            ("delete_leave_request","can create leave request"),
+        )
+
+
+
+
+
+

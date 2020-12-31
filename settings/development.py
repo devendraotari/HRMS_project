@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'rest_framework',
     "core",
+    "employees",
+    "management",
 ]
 
 MIDDLEWARE = [
@@ -133,6 +135,7 @@ REST_FRAMEWORK = {
          'rest_framework.permissions.IsAdminUser',
          ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
+    #  'core.myauthbackend.EmailPhoneBackend',
      'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
      )
 }
