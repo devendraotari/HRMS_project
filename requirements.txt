@@ -8,3 +8,6 @@ psycopg2==2.8.6
 pytz==2020.4
 six==1.15.0
 sqlparse==0.4.1
+
+PyJWT==1.7.1
+djangorestframework-jwt==1.11.0

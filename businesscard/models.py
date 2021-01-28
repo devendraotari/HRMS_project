@@ -8,20 +8,16 @@ User = get_user_model()
 
 
 class Like(models.Model):
-    user = models.ForeignKey(User, related_name="+")
+    owner = models.ForeignKey(User, related_name="+", on_delete=models.CASCADE)
+    post_id = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now=True)
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(User)
+    owner = models.ForeignKey(User, related_name="+", on_delete=models.CASCADE)
     text = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True)
-
-
-class UnReadNotification(models.Model):
-    is_read = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    text = models.CharField(max_length=255, blank=True)
+    post_id = models.PositiveIntegerField()
 
 
 class Card(models.Model):
@@ -39,23 +35,23 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=150, blank=True, null=True)
-    content = models.models.TextField(blank=False, null=False)
+    content = models.TextField(blank=False, null=False)
     card = models.ForeignKey(
         Card, related_name="+", blank=True, null=True, on_delete=models.CASCADE
     )
-    likes = models.ForeignKey(Like, related_name="+", blank=True, null=True)
-    comments = models.ForeignKey(Comment, related_name="+", blank=True, null=True)
+    # likes = models.ForeignKey(Like, related_name="+", blank=True, null=True, on_delete=models.CASCADE)
+    # comments = models.ForeignKey(Comment, related_name="+", blank=True, null=True, on_delete=models.CASCADE)
     share_link = models.CharField(max_length=255, blank=True, null=True)
-    author = models.ForeignKey(User, related_name="+", blank=True, null=True)
+    owner = models.ForeignKey(User, related_name="posts", blank=True, null=True, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["-updated_at"]
 
-    def __str__(self:Any)-> str:
+    def __str__(self: Any) -> str:
         return str(self.title)
 
     @property
-    def posted_on(self)-> str:
+    def posted_on(self) -> str:
         ini_time_for_now = datetime.now()
         delta = ini_time_for_now - (
             self.created_at if self.created_at > self.updated_at else self.updated_at
@@ -64,27 +60,32 @@ class Post(models.Model):
         return posted_on
 
     @property
-    def total_likes(self)-> int:
-        total_likes = len(self.likes) if self.likes else 0
+    def owner_name(self) -> str:
+        return str(self.owner.profile.firstname + " " + self.owner.profile.laststname)
+
+    @property
+    def total_likes(self) -> int:
+        likes = Like.objects.all().filter(post_id=self.id)
+        total_likes = len(likes) if likes else 0
         return total_likes
 
     @property
-    def total_comments(self)-> int:
-        total_comments = len(self.comments) if self.comments else 0
+    def total_comments(self) -> int:
+        comments = Comment.objects.all().filter(post_id=self.id)
+        total_comments = len(comments) if comments else 0
         return total_comments
-        
+
 
 class RegularProfile(models.Model):
     user = models.OneToOneField(
         User, related_name="regular_profile", on_delete=models.CASCADE
     )
     firstname = models.CharField(max_length=255, blank=True, null=True)
-    laststname = models.CharField(max_length=255, blank=True, null=True)
+    lastname = models.CharField(max_length=255, blank=True, null=True)
     profile_pic = models.FileField(
         upload_to="business_card/profile_pic/", max_length=100
     )
-    my_card = models.ForeignKey(Card, related_name="regular_profile")
+    my_card = models.ForeignKey(Card, related_name="regular_profile", blank=True, null=True, on_delete=models.SET_NULL)
 
-
-    def __str__(self)-> str:
+    def __str__(self) -> str:
         return str(self.firstname)
