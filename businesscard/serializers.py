@@ -40,7 +40,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ("id", "title", "content", "card", "total_likes", "total_comments", "owner_name", "owner")
+        fields = ("id", "title", "content", "card", "total_likes", "total_comments", "owner_name")
 
     def create(self, validated_data):
         card_id = validated_data.pop("card_id", None)
@@ -49,6 +49,7 @@ class PostSerializer(serializers.ModelSerializer):
             if card_id:
                 card = Card.objects.get(id=card_id)
             validated_data["card"] = card
+            print('about to create')
             post: Post = Post.objects.create(**validated_data)
             return post
         except ObjectDoesNotExist as odne:

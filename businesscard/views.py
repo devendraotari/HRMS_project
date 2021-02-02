@@ -23,9 +23,12 @@ class PostCreateAPIView(CreateAPIView):
         serializer = self.serializer_class(data=validated_data, partial=True)
         try:
             if serializer.is_valid(raise_exception=True):
+                print('before save')
                 serializer.save()
+                print('in after save')
                 return Response({"msg": "post created successfully"}, status=status.HTTP_201_CREATED)
         except Exception as e:
+            print('in exception')
             return Response({"error": str(e)}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
@@ -80,8 +83,8 @@ class LikeOnPostView(APIView):
 
     def post(self, request):
         if "post_id" in request.data:
-            like = Like.objects.get_or_create(owner=request.user)
-            like.post_id = request.data["post_id"]
+            like = Like.objects.get_or_create(owner=request.user,post_id=request.data["post_id"])
+            #like.post_id = request.data["post_id"]
             like.save()
             return Response({"msg": f"post with id {request.data['post_id']} liked"}, status=status.HTTP_200_OK)
         else:

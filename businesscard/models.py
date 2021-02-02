@@ -9,7 +9,7 @@ User = get_user_model()
 
 class Like(models.Model):
     owner = models.ForeignKey(User, related_name="+", on_delete=models.CASCADE)
-    post_id = models.PositiveIntegerField()
+    post_id = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now=True)
 
 
@@ -17,7 +17,7 @@ class Comment(models.Model):
     owner = models.ForeignKey(User, related_name="+", on_delete=models.CASCADE)
     text = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True)
-    post_id = models.PositiveIntegerField()
+    post_id = models.CharField(max_length=255)
 
 
 class Card(models.Model):
