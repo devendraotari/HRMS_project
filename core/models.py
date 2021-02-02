@@ -55,7 +55,7 @@ class CustomUserManager(BaseUserManager):
             )
         user.set_password(password)
         role = Role.objects.get_or_create(name=role_name)
-        user.role = role
+        user.role = role[0]
         user.save(using=self._db)
         return user
 
