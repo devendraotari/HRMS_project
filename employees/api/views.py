@@ -63,7 +63,7 @@ class LeaveAPIView(APIView):
     def post(self, request, *args, **kwargs):
         validated_data = {}
         validated_data.update(request.data)
-        validated_data["owner"] = request.owner
+        validated_data["owner"] = request.user
         serialized = LeaveSerializer(data=validated_data, partial=True)
         try:
             if serialized.is_valid(raise_exception=True):

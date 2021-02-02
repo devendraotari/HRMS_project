@@ -109,6 +109,8 @@ class CustomUser(AbstractBaseUser):
     def __str__(self):
         return str(self.id)
 
+
+
     def get_short_name(self):
         # The user is identified by their email address
         return str(self.email)

@@ -3,7 +3,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from businesscard.models import Card, Post, Like, Comment
 from core.profile.models import UserProfile
-
+from core.serializers import CustomUserSerializer
+from rest_framework.fields import CurrentUserDefault
 User = get_user_model()
 
 
@@ -37,23 +38,31 @@ class CardSerializers(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     card = CardSerializers(required=False)
-
+    # owner = CustomUserSerializer()
+    owner_id = serializers.CharField(required=True)
     class Meta:
         model = Post
-        fields = ("id", "title", "content", "card", "total_likes", "total_comments", "owner_name")
+        fields = ("id", "title", "content", "owner_id", "card", "total_likes", "total_comments", "owner_name")
 
     def create(self, validated_data):
+        print(f'entered create {validated_data}')
         card_id = validated_data.pop("card_id", None)
+        owner_id = validated_data.pop("owner_id",None)
         card = None
         try:
             if card_id:
                 card = Card.objects.get(id=card_id)
+            if owner_id:
+                validated_data["owner"] = User.objects.get(id=owner_id)
             validated_data["card"] = card
-            print('about to create')
+            print(f'about to create {validated_data}')
             post: Post = Post.objects.create(**validated_data)
+            print(f" from serializer post.owner {post.owner}")
             return post
         except ObjectDoesNotExist as odne:
             raise odne
+        except Exception as e:
+            raise e
 
     def update(self, instance, validated_data):
         card_id = validated_data.pop("card_id", None)

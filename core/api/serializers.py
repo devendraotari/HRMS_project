@@ -20,6 +20,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ('firstname', 'lastname', 'age', 'gender', "profile_pic")
 
 
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "email")
+
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer(required=False, partial=True)
     role = serializers.CharField(max_length=255, required=False)
@@ -34,11 +40,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile_data = validated_data.pop('profile')
         role = validated_data.pop('role', None)
-        
+
         print(f"in create serializer")
         try:
             print(f"{validated_data}")
-            
+
             if role:
                 validated_data["role_name"] = role
 
@@ -51,8 +57,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
                 lastname=profile_data['lastname'],
                 age=profile_data['age'],
                 gender=profile_data['gender'],
-                profile_pic=profile_data.get('profile_pic',None)
-            )            
+                profile_pic=profile_data.get('profile_pic', None)
+            )
 
             return user
         except ObjectDoesNotExist as e:

@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from datetime import datetime, timedelta
 from typing import Any, Callable, Iterator, Union, Optional, List
-
+from core.profile.models import UserProfile as Profile
 User = get_user_model()
 
 
@@ -61,7 +61,10 @@ class Post(models.Model):
 
     @property
     def owner_name(self) -> str:
-        return str(self.owner.profile.firstname + " " + self.owner.profile.laststname)
+        owner_name = None
+        profile = Profile.objects.get(user=self.owner)
+        owner_name = str(profile.firstname + " " + profile.lastname)
+        return owner_name
 
     @property
     def total_likes(self) -> int:
