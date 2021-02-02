@@ -3,3 +3,4 @@
 **/migrations
 .vscode/
 venv-hrms/
+.idea/
