@@ -105,6 +105,29 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CSRF_COOKIE_SECURE = True
 
+
+
+IS_PRODUCTION = os.environ.get("IS_PRODUCTION", False)
+if IS_PRODUCTION=="True":
+    print("importing production")
+    DATABASES = {
+    'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': '172.15.11.6',
+            'PORT': '5432',
+            'NAME': 'hrmsdb',
+            'USER': 'Dataviv',
+            'PASSWORD': 'DatavivPostgreSQLSecurePassword!',
+        }
+    }
+
+    STATIC_URL = '/static/'
+#    import settings.production
+else:
+    print("importing development")
+    import settings.development
+
+
 AUTH_USER_MODEL = 'core.CustomUser'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -162,8 +185,3 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': None,
 }
 
-IS_PRODUCTION = os.environ.get("IS_PRODUCTION", False)
-if IS_PRODUCTION:
-    import settings.production
-else:
-    import settings.development
