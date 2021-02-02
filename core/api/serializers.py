@@ -1,9 +1,8 @@
 # from BusinessHRMS.core.models import CustomUser
-from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth.hashers import check_password
 from rest_framework import serializers
-from core.models import CustomUser as User, Role
+from core.models import CustomUser as User
 from core.profile.models import UserProfile
 # from management.models import Company
 # from management.serializers import CompanySerializer

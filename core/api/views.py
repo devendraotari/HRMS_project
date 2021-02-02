@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 # Create your views here.
 
 '''
@@ -13,7 +11,7 @@ from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from core.serializers import UserRegistrationSerializer, UserLoginSerializer
+from core.api.serializers import UserRegistrationSerializer, UserLoginSerializer
 from core.models import CustomUser as User
 
 

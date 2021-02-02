@@ -3,8 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from businesscard.models import Card, Post, Like, Comment
 from core.profile.models import UserProfile
-from core.serializers import CustomUserSerializer
-from rest_framework.fields import CurrentUserDefault
+
 User = get_user_model()
 
 

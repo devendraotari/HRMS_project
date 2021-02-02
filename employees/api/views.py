@@ -5,7 +5,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from employees.models import Leave, EmployeeProfile
-from employees.serializers import EmployeeProfileSerializers, LeaveSerializer
+from employees.api.serializers import EmployeeProfileSerializers, LeaveSerializer
 from core.permissions import IsOwnerOrReadOnly
 
 

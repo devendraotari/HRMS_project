@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 # Create your views here.
 
 """
@@ -10,10 +8,9 @@ authentication
 """
 from django.urls import path
 from rest_framework_jwt import views as jwt_views
-from core.views import (
+from core.api.views import (
     UserRegistrationView,
     UserLoginView,
-    UserForgotPasswordView,
     # HRUserRegistrationView,
 )
 

@@ -105,13 +105,11 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CSRF_COOKIE_SECURE = True
 
-
-
 IS_PRODUCTION = os.environ.get("IS_PRODUCTION", False)
-if IS_PRODUCTION=="True":
+if IS_PRODUCTION == "True":
     print("importing production")
     DATABASES = {
-    'default': {
+        'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'HOST': '172.15.11.6',
             'PORT': '5432',
@@ -125,8 +123,16 @@ if IS_PRODUCTION=="True":
 #    import settings.production
 else:
     print("importing development")
-    import settings.development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
+    STATIC_URL = '/static/'
+
+    import settings.development
 
 AUTH_USER_MODEL = 'core.CustomUser'
 REST_FRAMEWORK = {
@@ -184,4 +190,3 @@ JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_AUTH_COOKIE': None,
 }
-

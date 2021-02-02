@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
-from core import urls as core_urls
-from businesscard import urls as card_urls
+from core.api import urls as core_urls
+from businesscard.api import urls as card_urls
+from employees.api import urls as emp_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/account/',include(core_urls)),
-    path('api/v1/bussinesscard/',include(card_urls))
+    path('api/v1/account/', include(core_urls)),
+    path('api/v1/bussinesscard/', include(card_urls)),
+    path('api/v1/employees/', include(emp_urls))
 ]

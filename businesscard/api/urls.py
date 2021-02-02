@@ -1,5 +1,5 @@
 from django.urls import path
-from businesscard.views import PostCreateAPIView, PostUpdateDeleteAPIView, PostListRetrieveView, LikeOnPostView, \
+from businesscard.api.views import PostCreateAPIView, PostUpdateDeleteAPIView, PostListRetrieveView, LikeOnPostView, \
     UnLikeOnPostView, CommentOnPostView, CommentOnPostRetrieveUpdateDestroyView
 
 urlpatterns = [

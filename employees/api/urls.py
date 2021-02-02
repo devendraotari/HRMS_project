@@ -1,5 +1,5 @@
 from django.urls import path
-from employees.views import EmployeeProfileAPIView, LeaveAPIView
+from employees.api.views import EmployeeProfileAPIView, LeaveAPIView
 
 # from rest_framework.routers import DefaultRouter
 #
