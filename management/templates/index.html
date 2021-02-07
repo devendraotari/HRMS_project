@@ -1,0 +1,921 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>CARDISH HRMS | Dashboard</title>
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'font-awesome/css/font-awesome.css' }"% rel="stylesheet">
+
+    <!-- Toastr style -->
+    <link href="{% static 'css/plugins/toastr/toastr.min.css' %}" rel="stylesheet">
+
+    <!-- Gritter -->
+    <link href="{% static 'js/plugins/gritter/jquery.gritter.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                             <div class="comlogo">
+                                 <h3>Cardish</h3>
+                        </div>
+                            <img alt="image" class="rounded-circle" src="/static/img/profile_small.jpg"/>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="{% url "contacts" %}">
+                                <span class="block m-t-xs font-bold">David Williams</span>
+                                <span class="text-muted text-xs block">HR Admin <b class="caret"></b></span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url "contacts" %}">Contacts</a></li>
+                                <li><a class="dropdown-item" href="{% url "mailbox" %}">Mailbox</a></li>
+                                <li class="dropdown-divider"></li>
+
+                                <li><a class="dropdown-item" href="">Logout</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            CARDISH
+                        </div>
+                    </li>
+                    <li class="active">
+                        <a href="{% url "home" %}"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
+                      
+                    </li>
+                    <li>
+                        <a href="{% url "AddEmployee" %}"><i class="fa fa-diamond"></i> <span class="nav-label">Add Employee</span></a>
+                    </li>
+                    <li>
+                        <a href="{% url "Apply_leave" %}"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Leave Application</span></a>
+                       
+                    </li>
+                    <li>
+                        <a href="{% url "mailbox" %}"><i class="fa fa-envelope"></i> <span class="nav-label">Mailbox </span><span class="label label-warning float-right">2/5</span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{% url "mailbox" %}">Inbox</a></li>
+                            <li><a href="{% url "mail_detail" %}">Email view</a></li>
+                            <li><a href="{% url "mail_compose" %}">Compose email</a></li>
+                        
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{% url "cardcustom" %}"><i class="fa fa-pie-chart"></i> <span class="nav-label">Card Customisation</span>  </a>
+                    </li>
+                    <li>
+                        <a href="{% url "widgets" %}"><i class="fa fa-flask"></i> <span class="nav-label">My Subscription Plan</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">Forms</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="form_basic.html">Basic form</a></li>
+                            <li><a href="form_file_upload.html">File Upload</a></li>
+                            <li><a href="form_editors.html">Text Editor</a></li>
+                        </ul>
+                    </li>
+                      <li>
+                        <a href="{% url "notifications" %}"><i class="fa fa-flask"></i> <span class="nav-label">Send Notification</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Employee Portal</span>  <span class="float-right label label-primary">SPECIAL</span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{% url "contacts" %}">Contacts</a></li>
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="projects.html">Projects</a></li>
+                            <li><a href="project_detail.html">Project detail</a></li>
+                            <li><a href="activity_stream.html">Activity stream</a></li>
+                            <li><a href="teams_board.html">Teams board</a></li>
+                            <li><a href="social_feed.html">Social feed</a></li>
+                            <li><a href="clients.html">Clients</a></li>
+                            <li><a href="file_manager.html">File manager</a></li>
+                           
+                        
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">Other Pages</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="search_results.html">Search results</a></li>
+                            <li><a href="lockscreen.html">Lockscreen</a></li>
+                            <li><a href="invoice.html">Invoice</a></li>
+                            <li><a href="login.html">Login</a></li>
+
+                            <li><a href="login_two_columns.html">Login v.2</a></li>
+                            <li><a href="forgot_password.html">Forget password</a></li>
+                            <li><a href="register.html">Register</a></li>
+                        
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            <form role="search" class="navbar-form-custom" action="search_results.html">
+                <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form>
+        </div>
+        {% csrf_token %}
+        {% for d in emp %}
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li style="padding: 20px">
+                    <span class="m-r-sm text-muted welcome-message">Welcome to CARDISH HRMS Admin Penal {{d.username}}</span>
+                </li>
+                {% endfor%}
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages dropdown-menu-right">
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a class="dropdown-item float-left" href="profile.html">
+                                    <img alt="image" class="rounded-circle" src="/static/img/a7.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <small class="float-right">46h ago</small>
+                                    <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a class="dropdown-item float-left" href="profile.html">
+                                    <img alt="image" class="rounded-circle" src="/static/img/a4.jpg">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="float-right text-navy">5h ago</small>
+                                    <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a class="dropdown-item float-left" href="profile.html">
+                                    <img alt="image" class="rounded-circle" src="/static/img/profile.jpg">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="float-right">23h ago</small>
+                                    <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                    <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="mailbox.html" class="dropdown-item">
+                                    <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="mailbox.html" class="dropdown-item">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                    <span class="float-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li>
+                            <a href="profile.html" class="dropdown-item">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="float-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li>
+                            <a href="grid_options.html" class="dropdown-item">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="float-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="notifications.html" class="dropdown-item">
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li>
+                    <a href="{% url "login" %}">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+                <li>
+                    <a class="right-sidebar-toggle">
+                        <i class="fa fa-tasks"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div>
+                <div class="row  border-bottom white-bg dashboard-header">
+
+                    <div class="col-md-3">
+                        <h2>Welcome Back david william</h2>
+                        <small>You have 16 messages and 8 notifications.</small>
+                        <ul class="list-group clear-list m-t">
+                            <li class="list-group-item fist-item">
+                                <span class="float-right">
+                                   1050 
+                                </span>
+                                <span class="label label-success">Total Employee</span> 
+                            </li>
+                          
+                          
+                            <li class="list-group-item">
+                                <span class="float-right">
+                                    24 Days
+                                </span>
+                                <span class="label label-default">Total Working Days</span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="float-right">
+                                 1000
+                                </span>
+                                <span class="label label-primary">Present Employee</span>
+                            </li>
+                              <li class="list-group-item">
+                                <span class="float-right">
+                                 50
+                                </span>
+                                <span class="label label-danger">Absent Employee</span>
+                            </li>
+                        </ul>
+                           <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10"><br>
+                    <div class="text-center">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                Update
+                            </button>
+                                </div>
+                            <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content animated bounceInRight">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                            <i class="fa fa-laptop modal-icon"></i>
+                                            <h4 class="modal-title"> Update Employee Status </h4>
+                                         
+                                        </div>
+                                        <div class="modal-body">
+                                                    <div class="form-group"><input type="text" placeholder="total Employee" class="form-control"></div>
+                                                    <div class="form-group"><input type="email" placeholder="Total Working Days" class="form-control"></div>
+                                        
+                                                       <div class="form-group"><input type="text" placeholder="Present Employee" class="form-control"></div>
+                                                        <div class="form-group"><input type="text" placeholder="Absent Employee" class="form-control"></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                 
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="flot-chart dashboard-chart">
+                            <div>
+                                   <h4>
+                            Reminder...
+                        </h4>
+                              <h3>
+                            Need to approved 50 new business card...
+                        </h3>
+                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque, facere. Temporibus, corporis nemo quas laboriosam nesciunt hic iste eaque perspiciatis debitis rem qui consequatur eius.</p>
+                            </div>
+                        </div>
+                        <div class="row text-left">
+                            <div class="col">
+                                <div class=" m-l-md">
+                                <span class="h5 font-bold m-t block">$ 406,100</span>
+                                <small class="text-muted m-b block">Sales marketing report</small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <span class="h5 font-bold m-t block">$ 150,401</span>
+                                <small class="text-muted m-b block">Annual sales revenue</small>
+                            </div>
+                            <div class="col">
+                                <span class="h5 font-bold m-t block">$ 16,822</span>
+                                <small class="text-muted m-b block">Half-year revenue margin</small>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="statistic-box">
+                        <h4>
+                            Project Beta progress
+                        </h4>
+                        <p>
+                            You have two project with not compleated task.
+                        </p>
+                            <div class="row text-center">
+                                <div class="col-lg-6">
+                                    <canvas id="doughnutChart2" width="80" height="80" style="margin: 18px auto 0"></canvas>
+                                    <h5 >Kolter</h5>
+                                </div>
+                                <div class="col-lg-6">
+                                    <canvas id="doughnutChart" width="80" height="80" style="margin: 18px auto 0"></canvas>
+                                    <h5 >Maxtor</h5>
+                                </div>
+                            </div>
+                            <div class="m-t">
+                                <small>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</small>
+                            </div>
+
+                        </div>
+                    </div>
+
+            </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content">
+                        <div class="row">
+                        <div class="col-lg-4">
+                            <div class="ibox ">
+                                <div class="ibox-title">
+                                    <h5>Leave Applications</h5> <span class="label label-primary">Cardish</span>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link" href="">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                            <i class="fa fa-wrench"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-user">
+                                            <li><a href="#" class="dropdown-item">Config option 1</a>
+                                            </li>
+                                            <li><a href="#" class="dropdown-item">Config option 2</a>
+                                            </li>
+                                        </ul>
+                                        <a class="close-link" href="">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                    <div>
+
+                                        <div class="float-right text-right">
+                                        </div>
+                                        <h4>Leave application due to suffering from fever.
+                                            <br/>
+                                            <small class="m-r"><a href="graph_flot.html">By aaryan </a> </small>
+                                        </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                           <div class="ibox ">
+                                <div class="ibox-title">
+                                    <h5>HR Admin Notice/Updates</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link" href="">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                            <i class="fa fa-wrench"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-user">
+                                            <li><a href="#" class="dropdown-item">Config option 1</a>
+                                            </li>
+                                            <li><a href="#" class="dropdown-item">Config option 2</a>
+                                            </li>
+                                        </ul>
+                                        <a class="close-link" href="">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content no-padding">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <p>Attention all employee this is salary increament notice.<a class="text-info" href="#">30-12-2020</a></p>
+                                            <small class="block text-muted"><i class="fa fa-clock-o"></i> 1 minuts ago</small>
+                                        </li>
+                                           <li class="list-group-item">
+                                            <p>Attention all employee this is salary increament notice.<a class="text-info" href="#">30-12-2020</a></p>
+                                            <small class="block text-muted"><i class="fa fa-clock-o"></i> 1 minuts ago</small>
+                                        </li>
+                                      
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-lg-4">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Messages</h5>
+                                        <div class="ibox-tools">
+                                            <span class="label label-warning-light float-right">2 Messages</span>
+                                           </div>
+                                    </div>
+                                    <div class="ibox-content">
+
+                                        <div>
+                                            <div class="feed-activity-list">
+
+                                                <div class="feed-element">
+                                                    <a class="float-left" href="profile.html">
+                                                        <img alt="image" class="rounded-circle" src="/static/img/profile.jpg">
+                                                    </a>
+                                                    <div class="media-body ">
+                                                        <small class="float-right">5m ago</small>
+                                                        <strong>Monica Smith</strong> posted a new blog. <br>
+                                                        <small class="text-muted">Today 5:60 pm - 12.06.2014</small>
+
+                                                    </div>
+                                                </div>
+
+                                               
+                                              
+                                                <div class="feed-element">
+                                                    <a class="float-left" href="profile.html">
+                                                        <img alt="image" class="rounded-circle" src="/static/img/a7.jpg">
+                                                    </a>
+                                                    <div class="media-body ">
+                                                        <small class="float-right">46h ago</small>
+                                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                                        <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <button class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More</button>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        <div class="col-lg-4">
+                            <div class="ibox ">
+                                <div class="ibox-title">
+                                    <h5>project</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link" href="">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                            <i class="fa fa-wrench"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-user">
+                                            <li><a href="#" class="dropdown-item">Config option 1</a>
+                                            </li>
+                                            <li><a href="#" class="dropdown-item">Config option 2</a>
+                                            </li>
+                                        </ul>
+                                        <a class="close-link" href="">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content ibox-heading">
+                                    <h3>You have meeting today!</h3>
+                                    <small><i class="fa fa-map-marker"></i> Meeting is on 6:00am. Check your schedule to see detail.</small>
+                                </div>
+                                <div class="ibox-content inspinia-timeline">
+
+                                    <div class="timeline-item">
+                                        <div class="row">
+                                            <div class="col-4 date">
+                                                <i class="fa fa-briefcase"></i>
+                                                6:00 am
+                                                <br/>
+                                                <small class="text-navy">2 hour ago</small>
+                                            </div>
+                                            <div class="col content no-top-border">
+                                                <p class="m-b-xs"><strong>Meeting</strong></p>
+
+                                                <p>Conference on the sales results for the previous year. Monica please examine sales trends in marketing and products. Below please find the current status of the
+                                                    sale.</p>
+
+                                                <p><span data-diameter="40" class="updating-chart">5,3,9,6,5,9,7,3,5,2,5,3,9,6,5,9,4,7,3,2,9,8,7,4,5,1,2,9,5,4,7,2,7,7,3,5,2</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                               
+                                  
+                                    <div class="timeline-item">
+                                        <div class="row">
+                                            <div class="col-4 date">
+                                                <i class="fa fa-phone"></i>
+                                                11:00 am
+                                                <br/>
+                                                <small class="text-navy">21 hour ago</small>
+                                            </div>
+                                            <div class="col content">
+                                                <p class="m-b-xs"><strong>Phone with Jeronimo</strong></p>
+                                                <p>
+                                                    Lorem Ipsum has been the industry's standard dummy text ever since.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 
+                                
+
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
+                </div>
+
+            </div>
+        </div>
+            <div class="footer">
+            
+                <div>
+                    <strong>Copyright</strong>Cardish HRMS &copy; 2020-2021
+                </div>
+            </div>
+        </div>
+        <div class="small-chat-box fadeInRight animated">
+
+            <div class="heading" draggable="true">
+                <small class="chat-date float-right">
+                    02.19.2015
+                </small>
+                Small chat
+            </div>
+
+            <div class="content">
+
+                <div class="left">
+                    <div class="author-name">
+                        Monica Jackson <small class="chat-date">
+                        10:02 am
+                    </small>
+                    </div>
+                    <div class="chat-message active">
+                        Lorem Ipsum is simply dummy text input.
+                    </div>
+
+                </div>
+                <div class="right">
+                    <div class="author-name">
+                        Mick Smith
+                        <small class="chat-date">
+                            11:24 am
+                        </small>
+                    </div>
+                    <div class="chat-message">
+                        Lorem Ipsum is simpl.
+                    </div>
+                </div>
+                <div class="left">
+                    <div class="author-name">
+                        Alice Novak
+                        <small class="chat-date">
+                            08:45 pm
+                        </small>
+                    </div>
+                    <div class="chat-message active">
+                        Check this stock char.
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="author-name">
+                        Anna Lamson
+                        <small class="chat-date">
+                            11:24 am
+                        </small>
+                    </div>
+                    <div class="chat-message">
+                        The standard chunk of Lorem Ipsum
+                    </div>
+                </div>
+                <div class="left">
+                    <div class="author-name">
+                        Mick Lane
+                        <small class="chat-date">
+                            08:45 pm
+                        </small>
+                    </div>
+                    <div class="chat-message active">
+                        I belive that. Lorem Ipsum is simply dummy text.
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-chat">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control">
+                    <span class="input-group-btn"> <button
+                        class="btn btn-primary" type="button">Send
+                </button> </span></div>
+            </div>
+
+        </div>
+        <div id="small-chat">
+
+            <span class="badge badge-warning float-right">5</span>
+            <a class="open-small-chat" href="">
+                <i class="fa fa-comments"></i>
+
+            </a>
+        </div>
+        <div id="right-sidebar" class="animated">
+            <div class="sidebar-container">
+
+                <ul class="nav nav-tabs navs-3">
+                 
+                    <li>
+                        <a class="nav-link" data-toggle="tab" href="#tab-1"> Contracts </a>
+                    </li>
+              
+                </ul>
+
+                <div class="tab-content">
+
+
+                    <div id="tab-1" class="tab-pane active">
+
+                        <div class="sidebar-title">
+                            <h3> <i class="fa fa-cube"></i> Latest Contract</h3>
+                            <small><i class="fa fa-tim"></i> You have 14 projects. 10 not completed.</small>
+                        </div>
+
+                        <ul class="sidebar-list">
+                            <li>
+                                <a href="#">
+                                    <div class="small float-right m-t-xs">9 hours ago</div>
+                                    <h4>Business valuation</h4>
+                                    It is a long established fact that a reader will be distracted.
+
+                                    <div class="small">Completion with: 22%</div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 22%;" class="progress-bar progress-bar-warning"></div>
+                                    </div>
+                                    <div class="small text-muted m-t-xs">Project end: 4:00 pm - 3.12.2020</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="small float-right m-t-xs">9 hours ago</div>
+                                    <h4>Contract with Company </h4>
+                                    Many desktop publishing packages and web page editors.
+
+                                    <div class="small">Completion with: 48%</div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 48%;" class="progress-bar"></div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+
+                    </div>
+                    
+                    <div id="tab-2" class="tab-pane ">
+
+                        <div class="sidebar-title">
+                            <h3> <i class="fa fa-comments-o"></i> Latest Notes</h3>
+                            <small><i class="fa fa-tim"></i> You have 2 new message.</small>
+                        </div>
+
+                        <div>
+
+                            <div class="sidebar-message">
+                                <a href="#">
+                                    <div class="float-left text-center">
+                                        <img alt="image" class="rounded-circle message-avatar" src="/static/img/a1.jpg">
+
+                                        <div class="m-t-xs">
+                                            <i class="fa fa-star text-warning"></i>
+                                            <i class="fa fa-star text-warning"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+
+                                        There are many variations of passages of Lorem Ipsum available.
+                                        <br>
+                                        <small class="text-muted">Today 4:21 pm</small>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="sidebar-message">
+                                <a href="#">
+                                    <div class="float-left text-center">
+                                        <img alt="image" class="rounded-circle message-avatar" src="/static/img/a2.jpg">
+                                    </div>
+                                    <div class="media-body">
+                                        The point of using Lorem Ipsum is that it has a more-or-less normal.
+                                        <br>
+                                        <small class="text-muted">Yesterday 2:45 pm</small>
+                                    </div>
+                                </a>
+                            </div>
+                          
+                       
+                      
+                         
+                        </div>
+
+                    </div>
+
+
+              
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+
+    <!-- Flot -->
+    <script src="{% static 'js/plugins/flot/jquery.flot.js' %}"></script>
+    <script src="{% static 'js/plugins/flot/jquery.flot.tooltip.min.js' %}"></script>
+    <script src="{% static 'js/plugins/flot/jquery.flot.spline.js' %}"></script>
+    <script src="{% static 'js/plugins/flot/jquery.flot.resize.js' %}"></script>
+    <script src="{% static 'js/plugins/flot/jquery.flot.pie.js' %}"></script>
+
+    <!-- Peity -->
+    <script src="{% static 'js/plugins/peity/jquery.peity.min.js' %}"></script>
+    <script src="{% static 'js/demo/peity-demo.js' %}"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="{% static 'js/inspinia.js' %}"></script>
+    <script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+
+    <!-- jQuery UI -->
+    <script src="{% static 'js/plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+
+    <!-- GITTER -->
+    <script src="{% static 'js/plugins/gritter/jquery.gritter.min.js' %}"></script>
+
+    <!-- Sparkline -->
+    <script src="{% static 'js/plugins/sparkline/jquery.sparkline.min.js' %}"></script>
+
+    <!-- Sparkline demo data  -->
+    <script src="{% static 'js/demo/sparkline-demo.js' %}"></script>
+
+    <!-- ChartJS-->
+    <script src="{% static 'js/plugins/chartJs/Chart.min.js' %}"></script>
+
+    <!-- Toastr -->
+    <script src="{% static 'js/plugins/toastr/toastr.min.js' %}"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown',
+                    timeOut: 4000
+                };
+                toastr.success('HR Admin Panel', 'Welcome to CARDISH');
+
+            }, 1300);
+
+
+            var data1 = [
+                [0,4],[1,8],[2,5],[3,10],[4,4],[5,16],[6,5],[7,11],[8,6],[9,11],[10,30],[11,10],[12,13],[13,4],[14,3],[15,3],[16,6]
+            ];
+            var data2 = [
+                [0,1],[1,0],[2,2],[3,0],[4,1],[5,3],[6,1],[7,5],[8,2],[9,3],[10,2],[11,1],[12,0],[13,2],[14,8],[15,0],[16,0]
+            ];
+            $("#flot-dashboard-chart").length && $.plot($("#flot-dashboard-chart"), [
+                data1, data2
+            ],
+                    {
+                        series: {
+                            lines: {
+                                show: false,
+                                fill: true
+                            },
+                            splines: {
+                                show: true,
+                                tension: 0.4,
+                                lineWidth: 1,
+                                fill: 0.4
+                            },
+                            points: {
+                                radius: 0,
+                                show: true
+                            },
+                            shadowSize: 2
+                        },
+                        grid: {
+                            hoverable: true,
+                            clickable: true,
+                            tickColor: "#d5d5d5",
+                            borderWidth: 1,
+                            color: '#d5d5d5'
+                        },
+                        colors: ["#1ab394", "#1C84C6"],
+                        xaxis:{
+                        },
+                        yaxis: {
+                            ticks: 4
+                        },
+                        tooltip: false
+                    }
+            );
+
+            var doughnutData = {
+                labels: ["App","Software","Laptop" ],
+                datasets: [{
+                    data: [300,50,100],
+                    backgroundColor: ["#a3e1d4","#dedede","#9CC3DA"]
+                }]
+            } ;
+
+
+            var doughnutOptions = {
+                responsive: false,
+                legend: {
+                    display: false
+                }
+            };
+
+
+            var ctx4 = document.getElementById("doughnutChart").getContext("2d");
+            new Chart(ctx4, {type: 'doughnut', data: doughnutData, options:doughnutOptions});
+
+            var doughnutData = {
+                labels: ["App","Software","Laptop" ],
+                datasets: [{
+                    data: [70,27,85],
+                    backgroundColor: ["#a3e1d4","#dedede","#9CC3DA"]
+                }]
+            } ;
+
+
+            var doughnutOptions = {
+                responsive: false,
+                legend: {
+                    display: false
+                }
+            };
+
+
+            var ctx4 = document.getElementById("doughnutChart2").getContext("2d");
+            new Chart(ctx4, {type: 'doughnut', data: doughnutData, options:doughnutOptions});
+
+        });
+    </script>
+</body>
+</html>

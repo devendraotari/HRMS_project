@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "businesscard",
     "employees",
     # "management",
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

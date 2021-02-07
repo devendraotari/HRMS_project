@@ -92,3 +92,10 @@ class RegularProfile(models.Model):
 
     def __str__(self) -> str:
         return str(self.firstname)
+
+
+class SharedCardsMapping(models.Model):
+    card_id = models.CharField(max_length=17)
+    owner_id = models.CharField(max_length=17)
+    shared_with_user_id = models.CharField(max_length=17)
+    created_at = models.DateTimeField(auto_now_add=True)

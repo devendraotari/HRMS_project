@@ -30,15 +30,24 @@ class LikeSerializer(serializers.ModelSerializer):
 
 
 class CardSerializers(serializers.ModelSerializer):
+
     class Meta:
         model = Card
-        fields = "__all__"
+        fields = ("id", "created_at", "updated_at", "name", "background_image", "text", "logo")
+
+    def create(self, validated_data):
+        try:
+            pass
+        except:
+            pass
+
 
 
 class PostSerializer(serializers.ModelSerializer):
     card = CardSerializers(required=False)
     # owner = CustomUserSerializer()
     owner_id = serializers.CharField(required=True)
+
     class Meta:
         model = Post
         fields = ("id", "title", "content", "owner_id", "card", "total_likes", "total_comments", "owner_name")
@@ -46,7 +55,7 @@ class PostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         print(f'entered create {validated_data}')
         card_id = validated_data.pop("card_id", None)
-        owner_id = validated_data.pop("owner_id",None)
+        owner_id = validated_data.pop("owner_id", None)
         card = None
         try:
             if card_id:

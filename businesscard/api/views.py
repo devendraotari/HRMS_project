@@ -86,7 +86,7 @@ class LikeOnPostView(APIView):
         if "post_id" in request.data:
             like = Like.objects.get_or_create(owner=request.user, post_id=request.data["post_id"])
             # like.post_id = request.data["post_id"]
-            like.save()
+            like[0].save()
             return Response({"msg": f"post with id {request.data['post_id']} liked"}, status=status.HTTP_200_OK)
         else:
             return Response({"error": f"need post_id in request data"}, status=status.HTTP_204_NO_CONTENT)
@@ -168,3 +168,11 @@ class CommentOnPostRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
             return Response({"comment": serialized.data}, status=status.HTTP_200_OK)
         else:
             return Response({"error": f"comment with id {pk} not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class CardCreateAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JSONWebTokenAuthentication]
+
+    def post(self,request,*args,**kwargs):
+        pass
