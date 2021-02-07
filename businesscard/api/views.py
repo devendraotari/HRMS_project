@@ -128,7 +128,7 @@ class CommentOnPostView(APIView):
         if "post_id" in request.data:
             comment = Comment.objects.create(
                 post_id=request.data.get("post_id"),
-                content=request.data.get("content"),
+                text=request.data.get("text"),
                 owner=request.user,
             )
             comment.save()

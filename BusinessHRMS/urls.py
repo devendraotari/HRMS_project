@@ -19,7 +19,7 @@ from django.urls.conf import include
 from core.api import urls as core_urls
 from businesscard.api import urls as card_urls
 from employees.api import urls as emp_urls
-from management import urls as mgmt_urls
+#from management import urls as mgmt_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/account/', include(core_urls)),
