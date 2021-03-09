@@ -1,5 +1,5 @@
 from django.core.mail import EmailMultiAlternatives
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import AuthenticationForm
@@ -8,12 +8,15 @@ from django.template.loader import get_template
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.generic import FormView
+
 from .forms import UserRegisterForm, EmployeeForm, LeaveConfForm, EmpNotifyForm, LoginForm, CustomUserLoginForm
 from .models import Employee, Leave, Notify, Emails, Compose, ViewMail, ContactsDetails
 from django.template import Context
 from django.views.decorators.csrf import csrf_exempt
-
+from core.profile.models import UserProfile
 User = get_user_model()
+
 
 @csrf_exempt
 def register(request):
@@ -38,6 +41,51 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form, 'title': 'reqister here'})
 
+
+from django.utils.decorators import method_decorator
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class CustomUserLoginView(FormView):
+    form_class = AuthenticationForm
+    template_name = 'login_two_columns.html'
+    success_url = 'success/'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(data=request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+            )
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    profile = UserProfile.objects.get(user=user)
+                    firstname = profile.firstname
+                    lastname = profile.lastname
+                    if firstname and lastname:
+                        messages.success(request, f"{firstname + lastname}")
+                    else:
+                        messages.success(request, f"{user.username}")
+                    return redirect('home')
+                else:
+                    return HttpResponse('User is not active')  # TEMP
+            else:
+                return HttpResponse('User does not exist')  # TEMP
+        else:
+            return HttpResponse('Form is not valid')  # TEMP
+
+def base_view(request):
+    return render(request, template_name="base.html")
+
+
+def login_success(request):
+    return redirect('home')
 # @csrf_exempt
 # def login_view(request):
 #     if request.method == 'POST':
@@ -53,6 +101,12 @@ def register(request):
 #     form = AuthenticationForm()
 #     return render(request, 'login_two_columns.html', {'form': form, 'title': 'log in'})
 
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+
 @csrf_exempt
 def login_view(request):
     print("redirecting to home page")
@@ -62,7 +116,7 @@ def login_view(request):
         form = CustomUserLoginForm(request.POST)
         username = request.POST.get('username')
         password = request.POST.get('password')
-        print(username,password)
+        print(username, password)
         user = authenticate(email=username, password=password)
         if user:
             login(request, user)
@@ -90,7 +144,6 @@ def login_view(request):
         print("get method")
         form = CustomUserLoginForm()
         return render(request, 'login_two_columns.html', {'form': form, 'title': 'log in'})
-
 
 
 def forgot_password(request):

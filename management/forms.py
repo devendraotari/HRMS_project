@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django import forms
 from management.models import Employee, LeaveConf, Compose, Notify
 from django.contrib.auth import get_user_model
-
+from core.profile.models import UserProfile
 User = get_user_model()
 
 
@@ -67,6 +67,8 @@ class UserRegisterForm(UserCreationForm):
         print("saving user")
         if commit:
             user.save()
+            user_profile = UserProfile(user=user)
+            user_profile.save()
             print("saved user done")
         return user
 

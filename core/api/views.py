@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from core.api.serializers import UserRegistrationSerializer, UserLoginSerializer
 from core.models import CustomUser as User
+from django.contrib.auth.models import Group
 
 
 class UserRegistrationView(CreateAPIView):
@@ -22,10 +23,21 @@ class UserRegistrationView(CreateAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data, partial=True)
         print(f"{request.data}")
+        user_group = None
         try:
             if serializer.is_valid(raise_exception=True):
                 print("Serializer")
-                serializer.save()
+                user = serializer.save()
+                print(f"{type(user)} -> {type(user.role)} {user.role} ")
+                print(user)
+                if user.role.name == "H":
+                    user_group, created = Group.objects.get_or_create(name='HRAdmin')
+                if user.role.name == "E":
+                    user_group, created = Group.objects.get_or_create(name='Employee')
+                else:
+                    user_group, created = Group.objects.get_or_create(name='Cardish')
+                user.groups.add(user_group)
+                user.save()
                 status_code = status.HTTP_201_CREATED
                 response = {
                     'success': 'True',

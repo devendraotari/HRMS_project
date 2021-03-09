@@ -3,7 +3,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser
+    BaseUserManager, AbstractBaseUser, PermissionsMixin
 )
 
 ROLE_CHOICES = (
@@ -67,13 +67,13 @@ class CustomUserManager(BaseUserManager):
         )
         user.is_admin = True
         user.is_staff = True
-        role = Role.objects.get_or_create(name="S")
+        role, created = Role.objects.get_or_create(name="S")
         user.role = role
         user.save(using=self._db)
         return user
 
 
-class CustomUser(AbstractBaseUser):
+class CustomUser(AbstractBaseUser,PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(

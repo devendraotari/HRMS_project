@@ -27,7 +27,8 @@ DEBUG = True
 IS_PRODUCTION = False
 
 ALLOWED_HOSTS = ['*']
-
+CSRF_COOKIE_DOMAIN = '127.0.0.1'
+CSRF_COOKIE_SECURE = False
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,7 +42,7 @@ INSTALLED_APPS = [
     "core",
     "businesscard",
     "employees",
-    # "management",
+    "management",
     'crispy_forms',
 ]
 
@@ -104,7 +105,7 @@ CORS_ALLOW_HEADERS = [
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 
 IS_PRODUCTION = os.environ.get("IS_PRODUCTION", False)
 if IS_PRODUCTION == "True":

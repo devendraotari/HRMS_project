@@ -39,16 +39,16 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile_data = validated_data.pop('profile')
         role = validated_data.pop('role', None)
-
-        print(f"in create serializer")
+        user_group = None
+        # print(f"in create serializer")
         try:
-            print(f"{validated_data}")
+            # print(f"{validated_data}")
 
             if role:
                 validated_data["role_name"] = role
 
             user = User.objects.create_user(**validated_data)
-            print(user)
+            # print(user)
 
             UserProfile.objects.create(
                 user=user,
@@ -58,7 +58,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
                 gender=profile_data['gender'],
                 profile_pic=profile_data.get('profile_pic', None)
             )
-
+            # user.groups.add(user_group)
             return user
         except ObjectDoesNotExist as e:
             raise e

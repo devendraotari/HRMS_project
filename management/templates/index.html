@@ -137,13 +137,17 @@
             </form>
         </div>
         {% csrf_token %}
-        {% for d in emp %}
 
             <ul class="nav navbar-top-links navbar-right">
+                {% if user.is_authenticated %}
+                    <li style="padding: 20px">
+                        <span class="m-r-sm text-muted welcome-message">Welcome {{user.username}}, to CARDISH HRMS Admin Penal </span>
+                    </li>
+                {% else %}
                 <li style="padding: 20px">
-                    <span class="m-r-sm text-muted welcome-message">Welcome to CARDISH HRMS Admin Penal {{d.username}}</span>
+                    <span class="m-r-sm text-muted welcome-message">Your not not Logged in</span>
                 </li>
-                {% endfor%}
+                {% endif %}
                 <li class="dropdown">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                         <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
