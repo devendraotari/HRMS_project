@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from datetime import datetime, timedelta
 from typing import Any, Callable, Iterator, Union, Optional, List
 from core.profile.models import UserProfile as Profile
+
 User = get_user_model()
 
 
@@ -20,27 +21,65 @@ class Comment(models.Model):
     post_id = models.CharField(max_length=255)
 
 
-class Card(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class CardTemplate(models.Model):
+    '''
+    Owner:User this user will be the HR admin who has access to create the card template
+    This card template is used by HR-Admin for creating the company card
+    '''
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     background_image = models.FileField(upload_to="card/background/", max_length=100)
     text = models.CharField(max_length=255, blank=True, null=True)
     logo = models.ImageField(upload_to="card/logo_image/", blank=True, null=True)
+    company_name = models.CharField(max_length=255, blank=True, null=True)
+    owner = models.ForeignKey(User, related_name="card_template", blank=True, null=True, on_delete=models.CASCADE)
+
+    # class Meta:
+    #     permissions = (
+    #         ("create_card_template", "can create_card_template"),
+    #         ("update_card_template", "can update card template"),
+    #         ("delete_card_template", "can delete card template"),
+    #         ("view_card_template", "can view card template")
+    #     )
+
+
+class CompanyCard(models.Model):
+    """
+    Owner:User this user is the employee who will be using the card and sharing the same
+    This Company card is the instance which HR will create for employee and employees can share it
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    card_template = models.ForeignKey(CardTemplate,related_name="+",blank=False,null=False,on_delete=models.CASCADE)
+    owner = models.ForeignKey(User,related_name='card',on_delete=models.CASCADE)
+    text = models.CharField(max_length=255, blank=True, null=True)
+
+
+class NonCompanyCard(models.Model):
+    """
+    Owner:User here owner is the regular cardish user who has not
+               added/subscribed to company but he/she can possess a personal card
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    background_image = models.FileField(upload_to="non_company_card/background/", max_length=100)
+    text = models.CharField(max_length=255, blank=True, null=True)
+    logo = models.ImageField(upload_to="non_company_card/logo_image/", blank=True, null=True)
+    company_name = models.CharField(max_length=255, blank=True, null=True)
+    owner = models.ForeignKey(User, related_name="non_company_card", blank=True, null=True, on_delete=models.CASCADE)
 
 
 class Post(models.Model):
+    """
+    Post: this is the feed post of cardish app
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=150, blank=True, null=True)
     content = models.TextField(blank=False, null=False)
-    card = models.ForeignKey(
-        Card, related_name="+", blank=True, null=True, on_delete=models.CASCADE
-    )
-    # likes = models.ForeignKey(Like, related_name="+", blank=True, null=True, on_delete=models.CASCADE)
-    # comments = models.ForeignKey(Comment, related_name="+", blank=True, null=True, on_delete=models.CASCADE)
     share_link = models.CharField(max_length=255, blank=True, null=True)
     owner = models.ForeignKey(User, related_name="posts", blank=True, null=True, on_delete=models.CASCADE)
 
@@ -88,7 +127,6 @@ class RegularProfile(models.Model):
     profile_pic = models.FileField(
         upload_to="business_card/profile_pic/", max_length=100
     )
-    my_card = models.ForeignKey(Card, related_name="regular_profile", blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self) -> str:
         return str(self.firstname)

@@ -1,6 +1,6 @@
 from django.urls import path
 from businesscard.api.views import PostCreateAPIView, PostUpdateDeleteAPIView, PostListRetrieveView, LikeOnPostView, \
-    UnLikeOnPostView, CommentOnPostView, CommentOnPostRetrieveUpdateDestroyView
+    UnLikeOnPostView, CommentOnPostView, CommentOnPostRetrieveUpdateDestroyView,CardTemplateAPIView
 
 urlpatterns = [
     path("create-post/", PostCreateAPIView.as_view()),
@@ -11,5 +11,6 @@ urlpatterns = [
     path("like-post/", LikeOnPostView.as_view()),
     path("unlike-post/", UnLikeOnPostView.as_view()),
     path("comment-post/", CommentOnPostView.as_view()),
-    path("comment-post/<str:pk>", CommentOnPostRetrieveUpdateDestroyView.as_view())
+    path("comment-post/<str:pk>", CommentOnPostRetrieveUpdateDestroyView.as_view()),
+    path("card-template/",CardTemplateAPIView.as_view()),
 ]

@@ -1,13 +1,18 @@
+import uuid
 from django.db.models import Q
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from businesscard.models import Like, Comment, Post
-from businesscard.api.serializers import CommentSerializer, PostSerializer
+from businesscard.models import Like, Comment, Post, CardTemplate, NonCompanyCard, CompanyCard
+from businesscard.api.serializers import CommentSerializer, PostSerializer, CardTemplateSerializers, \
+    NonCompanyCardSerializers, CompanyCardSerializer
 from rest_framework import permissions
 from core.permissions import IsOwnerOrReadOnly
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class PostCreateAPIView(CreateAPIView):
@@ -19,14 +24,15 @@ class PostCreateAPIView(CreateAPIView):
         validated_data = {}
         owner = request.user
         validated_data.update(request.data)
-        validated_data.update({"owner_id": str(request.user.id)})
+        validated_data.update({"owner": request.user.id})
         print(f"before serializer {validated_data}")
         serializer = self.serializer_class(data=validated_data, partial=True)
         try:
             if serializer.is_valid(raise_exception=True):
                 print('before save')
                 serializer.save()
-                return Response({"msg": "post created successfully","created_post":serializer.data}, status=status.HTTP_201_CREATED)
+                return Response({"msg": "post created successfully", "created_post": serializer.data},
+                                status=status.HTTP_201_CREATED)
         except Exception as e:
             print('in exception')
             return Response({"error": str(e)}, status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -170,9 +176,171 @@ class CommentOnPostRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
             return Response({"error": f"comment with id {pk} not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class CardCreateAPIView(APIView):
+'''
+Card sharing Related APIs  
+'''
+
+
+class CardTemplateAPIView(APIView):
+    """
+    This View for CRUD operations on CardTemplate
+    """
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [JSONWebTokenAuthentication]
 
-    def post(self,request,*args,**kwargs):
-        pass
+    def post(self, request, *args, **kwargs):
+        validated_data = {}
+        validated_data.update(request.data)
+        owner = request.user
+        validated_data.update({"owner": owner.id})
+        serializer = CardTemplateSerializers(data=validated_data, partial=True)
+        try:
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response({"msg": f"card template is created with id {serializer.data}"},
+                                status=status.HTTP_201_CREATED
+                                )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, pk=None, *args, **kwargs):
+        try:
+            pk = uuid.UUID(pk)
+            card_template = CardTemplate.objects.get(id=pk, owner=request.user)
+            serializer = CardTemplateSerializers(card_template)
+            return Response({"msg": serializer.data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk=None, *args, **kwargs):
+        try:
+            pk = uuid.UUID(pk)
+            card_template = CardTemplateSerializers.objects.get(id=pk)
+            card_template.delete()
+            return Response({"msg": f"card template with id {pk} is deleted"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, pk=None, *args, **kwargs):
+        try:
+            pk = uuid.UUID(pk)
+            instance = CardTemplateSerializers.objects.get(id=pk)
+            serializer = CardTemplateSerializers(instance=instance, data=request.data, partial=True)
+            if serializer.is_valid(raise_exception=True):
+                return Response({"msg": f"card template with id {pk} is updated with {serializer.data}"},
+                                status=status.HTTP_200_OK)
+            else:
+                return Response({"error": f"data in post request is not appropriate"},
+                                status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class NonCompanyCardAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JSONWebTokenAuthentication]
+
+    def post(self, request, *args, **kwargs):
+        validated_data = {}
+        validated_data.update(request.data)
+        owner = request.user
+        validated_data.update({"owner": owner.id})
+        serializer = NonCompanyCardSerializers(data=validated_data, partial=True)
+        try:
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response({"msg": f"card template is created with id {serializer.data}"},
+                                status=status.HTTP_201_CREATED
+                                )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, pk=None, *args, **kwargs):
+        try:
+            pk = uuid.UUID(pk)
+            non_company_card = NonCompanyCard.objects.get(id=pk, owner=request.user)
+            serializer = NonCompanyCardSerializers(non_company_card)
+            return Response({"msg": serializer.data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk=None, *args, **kwargs):
+        try:
+            pk = uuid.UUID(pk)
+            non_company_card = NonCompanyCardSerializers.objects.get(id=pk)
+            non_company_card.delete()
+            return Response({"msg": f"card template with id {pk} is deleted"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, pk=None, *args, **kwargs):
+        try:
+            pk = uuid.UUID(pk)
+            instance = NonCompanyCardSerializers.objects.get(id=pk)
+            serializer = NonCompanyCardSerializers(instance=instance, data=request.data, partial=True)
+            if serializer.is_valid(raise_exception=True):
+                return Response({"msg": f"card template with id {pk} is updated with {serializer.data}"},
+                                status=status.HTTP_200_OK)
+            else:
+                return Response({"error": f"data in post request is not appropriate"},
+                                status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+'''
+company card related views
+'''
+
+
+class CompanyCardAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JSONWebTokenAuthentication]
+
+    def post(self, request, *args, **kwargs):
+        validated_data = {}
+        owner = request.user
+        try:
+            validated_data.setdefault("owner", owner.id)
+            validated_data.setdefault("card_template", uuid.UUID(request.data.get("card_template_id")))
+            validated_data.setdefault("text", request.data.get("text", f"{owner.username}"))
+
+            serializer = CompanyCardSerializer(data=validated_data, partial=True)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response({"msg": f"card template is created with id {serializer.data}"},
+                                status=status.HTTP_201_CREATED
+                                )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, pk=None, *args, **kwargs):
+        try:
+            pk = uuid.UUID(pk)
+            company_card = CompanyCard.objects.get(id=pk, owner=request.user)
+            serializer = CompanyCardSerializer(company_card)
+            return Response({"msg": serializer.data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk=None, *args, **kwargs):
+        try:
+            pk = uuid.UUID(pk)
+            company_card = CompanyCardSerializer.objects.get(id=pk)
+            company_card.delete()
+            return Response({"msg": f"card template with id {pk} is deleted"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, pk=None, *args, **kwargs):
+        try:
+            instance = CompanyCard.objects.get(id=pk)
+            serializer = CompanyCardSerializer(instance=instance, data=request.data, partial=True)
+            if serializer.is_valid(raise_exception=True):
+                return Response({"msg": f"card template with id {pk} is updated with {serializer.data}"},
+                                status=status.HTTP_200_OK)
+            else:
+                return Response({"error": f"data in post request is not appropriate"},
+                                status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

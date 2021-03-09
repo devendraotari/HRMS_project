@@ -1,16 +1,22 @@
-from django.urls import path
+from django.urls import path, include
 from management import views as user_view
 from django.contrib.auth import views as auth
 from . import views
-
+from django.contrib.auth import authenticate, login, logout, get_user_model
 urlpatterns = [
-    path('', views.home, name='home'),
+    # path('', views.home, name='home'),
+    path('home/', views.home, name='home'),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('register/', user_view.register, name='register'),
-    path('login/', user_view.login_view, name='login'),
-    path('logout/', auth.LogoutView.as_view(template_name='index.html'), name='logout'),
-    path('register', views.register, name="register"),
+    path('login/', user_view.CustomUserLoginView.as_view(), name='login'),
+    path('login/success', user_view.login_success, name='login-success'),
+    path('logout', user_view.logout_view, name="logout"),
+    path('base/', user_view.base_view, name='base-view'),
+
+    # path('logout/', auth.LogoutView.as_view(template_name='index.html'), name='logout'),
+    # path('register', views.register, name="register"),
     # path('login', views.login, name="login"),
-    path('logout', views.logout, name="logout"),
+    # path('logout', views.logout, name="logout"),
     path('forgot_password', views.forgot_password, name="forgot_password"),
     path('AddEmployee', views.add_employee, name="AddEmployee"),
     path('addCat', views.add_categories),
